@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useCallback } from "react";
+import apiClient from "../api";
 import { useBettingStats } from "../hooks/useBettingStats";
 import {
   Container,
@@ -146,38 +146,38 @@ const Bets: React.FC = () => {
   });
 
   // Fetch data
-  useEffect(() => {
-    fetchBets();
-    fetchPlayers();
-    fetchTournaments();
-  }, []);
-
-  const fetchBets = async () => {
+  const fetchBets = useCallback(async () => {
     try {
-      const response = await axios.get("/api/v1/bets/");
+      const response = await apiClient.get("/bets/");
       setBets(response.data);
     } catch (err) {
       console.error("Error fetching bets:", err);
     }
-  };
+  }, []);
 
-  const fetchPlayers = async () => {
+  const fetchPlayers = useCallback(async () => {
     try {
-      const response = await axios.get("/api/v1/players");
+      const response = await apiClient.get("/players");
       setPlayers(response.data);
     } catch (err) {
       console.error("Error fetching players:", err);
     }
-  };
+  }, []);
 
-  const fetchTournaments = async () => {
+  const fetchTournaments = useCallback(async () => {
     try {
-      const response = await axios.get("/api/v1/tournaments");
+      const response = await apiClient.get("/tournaments");
       setTournaments(response.data);
     } catch (err) {
       console.error("Error fetching tournaments:", err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchBets();
+    fetchPlayers();
+    fetchTournaments();
+  }, [fetchBets, fetchPlayers, fetchTournaments]);
 
   const handleAddBet = async () => {
     if (!betForm.bet_type || !betForm.amount) {
@@ -201,7 +201,7 @@ const Bets: React.FC = () => {
         placed_at: new Date(betForm.placed_at).toISOString(),
       };
 
-      await axios.post("/api/v1/bets/", null, { params: payload });
+      await apiClient.post("/bets/", null, { params: payload });
 
       setAddBetOpen(false);
       setBetForm({
@@ -227,7 +227,7 @@ const Bets: React.FC = () => {
   const handleUpdateBetStatus = async (betId: number, status: string) => {
     setLoading(true);
     try {
-      await axios.put(`/api/v1/bets/${betId}`, { status });
+      await apiClient.put(`/bets/${betId}`, { status });
       setSuccess(`Bet marked as ${status}!`);
       fetchBets();
       refreshStats();
@@ -245,7 +245,7 @@ const Bets: React.FC = () => {
 
     setLoading(true);
     try {
-      await axios.delete(`/api/v1/bets/${selectedBetId}`);
+      await apiClient.delete(`/bets/${selectedBetId}`);
       setSuccess("Bet deleted successfully!");
       fetchBets();
       refreshStats();

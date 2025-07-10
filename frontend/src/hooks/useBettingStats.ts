@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect, useCallback } from "react";
+import apiClient from "../api";
 
 export interface BettingStats {
   total_bets: number;
@@ -18,11 +18,11 @@ export const useBettingStats = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get("/api/v1/bets/stats/summary");
+      const response = await apiClient.get("/bets/stats/summary");
       setStats(response.data);
     } catch (err) {
       console.error("Error fetching betting stats:", err);
@@ -30,11 +30,11 @@ export const useBettingStats = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchStats();
-  }, []);
+  }, [fetchStats]);
 
   const refreshStats = () => {
     fetchStats();
