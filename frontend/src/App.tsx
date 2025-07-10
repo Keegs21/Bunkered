@@ -68,7 +68,7 @@ const App: React.FC = () => {
             mt: 1,
           }}
         >
-          Preparing your golf experience
+          Preparing your golf experience...
         </Typography>
       </Box>
     );
