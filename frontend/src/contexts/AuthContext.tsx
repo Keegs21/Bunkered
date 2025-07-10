@@ -56,6 +56,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { access_token } = response.data;
       localStorage.setItem("token", access_token);
 
+      // Explicitly set the authorization header for the current session
+      apiClient.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${access_token}`;
+
       const userResponse = await apiClient.get<User>("/users/me");
       setUser(userResponse.data);
     } catch (error) {
@@ -80,7 +85,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("token");
-    // The interceptor will handle clearing the header on subsequent requests
+    // Clear the authorization header on logout
+    delete apiClient.defaults.headers.common["Authorization"];
   };
 
   const value: AuthContextType = {
