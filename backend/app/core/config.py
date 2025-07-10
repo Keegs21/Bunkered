@@ -39,12 +39,11 @@ class Settings(BaseSettings):
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]
-        elif isinstance(v, list):
+        if isinstance(v, list):
             return v
-        elif isinstance(v, str):
-            return [v]
+        if isinstance(v, str):
+            # Handle comma-separated string from environment variables
+            return [i.strip() for i in v.split(',')]
         return []
     
     # External APIs
