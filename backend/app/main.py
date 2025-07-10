@@ -1,3 +1,10 @@
+import sys
+import os
+
+# Add the parent directory of 'app' to the Python path
+# This allows for absolute imports like 'from app.core...' to work in the Vercel environment
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
