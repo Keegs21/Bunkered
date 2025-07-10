@@ -33,8 +33,8 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
-    # CORS - Fixed type to match validator output
-    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000"]
+    # CORS
+    ALLOWED_ORIGINS: Union[List[str], str] = ["http://localhost:3000"]
     
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
