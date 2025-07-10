@@ -39,7 +39,10 @@ const Login: React.FC = () => {
     setError("");
 
     try {
-      await login(formData.username, formData.password);
+      const data = new FormData();
+      data.append("username", formData.username);
+      data.append("password", formData.password);
+      await login(data);
       navigate("/dashboard");
     } catch (err: any) {
       setError(err.response?.data?.detail || "Login failed. Please try again.");
