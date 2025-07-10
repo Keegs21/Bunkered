@@ -161,14 +161,11 @@ const Dashboard: React.FC = () => {
         setIsLoading(true);
         setError(null);
 
-
         // Fetch teams and leagues in parallel, like Leagues page does
         const [teams, leagues] = await Promise.all([
           fetchMyTeams(),
           fetchLeagues(),
         ]);
-
-
 
         if (!teams || teams.length === 0) {
           setTeamStandings([]);
@@ -184,7 +181,6 @@ const Dashboard: React.FC = () => {
           const league = leagues.find((l: any) => l.id === team.league_id);
 
           if (league) {
-
             // Get leaderboard for this league
             const leaderboard = await fetchLeagueStandings(team.league_id);
 
@@ -370,7 +366,7 @@ const Dashboard: React.FC = () => {
               Welcome back, {user?.first_name || user?.username}! 🏌️‍♂️
             </Typography>
             <Typography variant="body1" sx={{ opacity: 0.9 }}>
-              Here's your latest standings and betting performance
+              Here's your latest standings and betting performance.
             </Typography>
           </Box>
         </Box>
