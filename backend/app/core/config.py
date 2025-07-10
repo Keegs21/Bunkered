@@ -1,5 +1,5 @@
 from typing import Any, Dict, List, Optional, Union
-from pydantic import AnyHttpUrl, PostgresDsn, field_validator
+from pydantic import AnyHttpUrl, field_validator
 from pydantic_settings import BaseSettings
 import os
 
@@ -10,20 +10,10 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     
     # Database
-    DATABASE_URL: Optional[PostgresDsn] = None
+    # Pydantic will automatically read this from the DATABASE_URL environment variable.
+    # The default value is for local Docker development.
+    DATABASE_URL: str = "postgresql://postgres:postgres@db:5432/bunkered"
     DATABASE_URL_TEST: str = "sqlite:///./test.db"
-    
-    @field_validator("DATABASE_URL", mode="before")
-    @classmethod
-    def assemble_db_connection(cls, v: Optional[str]) -> Any:
-        if isinstance(v, str):
-            return v
-        # Vercel provides a DATABASE_URL environment variable.
-        # Use it if it exists, otherwise fall back to the Docker default.
-        db_url = os.environ.get("DATABASE_URL")
-        if db_url:
-            return db_url
-        return "postgresql://postgres:postgres@db:5432/bunkered"
     
     # Redis
     REDIS_URL: str = "redis://localhost:6379"
