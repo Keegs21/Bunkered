@@ -10,10 +10,16 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     
     # Database
-    # Pydantic will automatically read this from the DATABASE_URL environment variable.
-    # The default value is for local Docker development.
     DATABASE_URL: str = "postgresql://postgres:postgres@db:5432/bunkered"
     DATABASE_URL_TEST: str = "sqlite:///./test.db"
+
+    @field_validator("DATABASE_URL")
+    @classmethod
+    def fix_postgres_scheme(cls, v: str) -> str:
+        """Ensure the database URL uses the 'postgresql' scheme."""
+        if v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql://", 1)
+        return v
     
     # Redis
     REDIS_URL: str = "redis://localhost:6379"
