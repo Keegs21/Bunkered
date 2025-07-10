@@ -51,18 +51,7 @@ import {
   FilterList,
 } from "@mui/icons-material";
 import { useAuth } from "../contexts/AuthContext";
-
-interface User {
-  id: number;
-  email: string;
-  username: string;
-  first_name?: string;
-  last_name?: string;
-  is_superuser: boolean;
-  is_active: boolean;
-  created_at: string;
-  updated_at?: string;
-}
+import { User } from "../types";
 
 interface CreateUserForm {
   email: string;

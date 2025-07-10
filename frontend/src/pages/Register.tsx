@@ -33,6 +33,7 @@ const Register: React.FC = () => {
     lastName: "",
     password: "",
     confirmPassword: "",
+    referral_code: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -63,6 +64,7 @@ const Register: React.FC = () => {
         first_name: formData.firstName,
         last_name: formData.lastName,
         password: formData.password,
+        referral_code: formData.referral_code,
       });
       navigate("/dashboard", { replace: true });
     } catch (err: any) {
@@ -272,6 +274,23 @@ const Register: React.FC = () => {
                     required
                     disabled={loading}
                     autoComplete="new-password"
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        height: { xs: 56, sm: 48 },
+                      },
+                      "& .MuiInputBase-input": {
+                        fontSize: { xs: "16px", sm: "1rem" }, // Prevents zoom on iOS
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Referral Code"
+                    name="referral_code"
+                    value={formData.referral_code}
+                    onChange={handleChange}
                     sx={{
                       "& .MuiInputBase-root": {
                         height: { xs: 56, sm: 48 },
